@@ -1,0 +1,126 @@
+@import 'colors';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $bg-color;
+}
+
+.app-form {
+  margin: auto;
+  width: 350px;
+  margin-top: 65px;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.app-logo {
+  height: 90px;
+  width: 120px;
+  margin: 30px;
+  text-align: center;
+}
+
+.app-loader {
+  height: 120px;
+  width: 120px;
+  margin: auto;
+  margin-top: 140px;
+  text-align: center;
+}
+
+.app-logo-container {
+  text-align: center;
+}
+
+.error {
+  color: $error-color;
+  position: relative;
+  top: -20px;
+  text-align: center;
+}
+
+.toggle-roles {
+  position: relative;
+  top: 5px;
+  font-weight: bold;
+}
+
+.submit-button {
+  background-color: $main-color;
+  width: 100px;
+  height: 37px;
+  border-radius: 5%;
+
+  &:hover {
+    background-color: $bg-color;
+    color: $main-color;
+    border-color: $main-color;
+    width: 100px;
+    height: 37px;
+    border-radius: 5%;
+  }
+}
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 27px;
+  margin: 10px 0px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $main-color;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: $bg-color;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: $main-color;
+}
+
+input:focus+.slider {
+  box-shadow: 0 0 1px $main-color;
+}
+
+input:checked+.slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}

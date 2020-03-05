@@ -1,0 +1,5 @@
+export const IS_LOADING = 'IS_LOADING';
+export const IS_COMPLETE = 'IS_COMPLETE';
+export const SERVER_ERROR = 'SERVER_ERROR';
+export const VALIDATION_ERROR = 'VALIDATION_ERROR';
+export const IS_AUTHENTICATED = 'IS_AUTHENTICATED';
