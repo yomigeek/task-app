@@ -62,8 +62,50 @@ body {
     height: 37px;
     border-radius: 5%;
   }
+
 }
 
+.app-button {
+  width: 100px;
+  height: 37px;
+  border-radius: 5%;
+}
+
+.app-nav {
+  background-color: $main-color;
+}
+
+.nav-link {
+  color: $nav-link-color;
+}
+
+.form-header-text{
+  font-size: 20px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.approved-status {
+  background-color: $approved;
+  color: $bg-color;
+
+}
+.rejected-status {
+  background-color: $rejected;
+  color: $bg-color
+}
+
+.success-msg {
+  color: $approved;
+  margin: 10px;
+  text-align: center;
+}
+
+.error-msg {
+  color: $rejected;
+  margin: 10px;
+  text-align: center;
+
+}
 
 .switch {
   position: relative;
