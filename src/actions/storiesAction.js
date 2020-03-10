@@ -1,35 +1,24 @@
 import API from '../utilities/api';
 import * as types from '../constants/actionTypes';
-import jwtDecode from 'jwt-decode';
-import {dummyStory, success} from '../data';
-
-const token = localStorage.getItem('token');
-
-const userRole = jwtDecode(token).role.toLowerCase();
-const userId = jwtDecode(token).id;
 
 
-const getStoriesAction = () => async (dispatch) => {
+const getStoriesAction = (userInfo) => async (dispatch) => {
 	dispatch({
 		type: types.IS_LOADING
   });
   try {
-    // const getStoriesUrl = '/api/getStories';
-    // const response = await API.get(getStoriesUrl).then((res) => {
-    //   return res;
-    // });
-
-    // console.log(response);
-
-
+    const getStoriesUrl = '/getStories';
+    const response = await API.get(getStoriesUrl).then((res) => {
+      return res;
+    });
 
     let allStories;
-    if (userRole === process.env.REACT_APP_ADMIN) {
-      allStories = dummyStory
+    if (userInfo.role === process.env.REACT_APP_ADMIN) {
+      allStories = response.data.data
     }
     else {
-      allStories = dummyStory.filter(
-        (story) => story.createdBy ===  userId
+      allStories = response.data.data.filter(
+        (story) => story.createdBy ===  userInfo.id
       )
     }
 
@@ -38,50 +27,60 @@ const getStoriesAction = () => async (dispatch) => {
 
   }
   catch{
-    const loginError = 'Internet/Server Connection ERROR! Check your Internet Connection';
-    dispatch({ type: types.VALIDATION_ERROR, loginError });
+    const appError = 'Internet/Server Connection ERROR! Check your Internet Connection';
+    dispatch({ type: types.APP_ERROR, appError });
   }
 	
 	return null;
 };
 
-const addStoryAction = (storyInfo, history) => async (dispatch) => {
+const addStoryAction = (history) => async (dispatch) => {
 	dispatch({type: types.IS_LOADING});
-  dispatch({type: types.ADDING_STORY});
+  dispatch({type: types.STORY_PROCESS_COMPLETE});
 
   try {
-    const addStoryUrl = '/api/createStory';
+    const addStoryUrl = '/createStory';
     const response = await API.post(addStoryUrl).then((res) => {
       return res;
     });
     dispatch({ type: types.IS_COMPLETE });
+    const payload = {
+      category: 'success',
+      value: 'Story has been added successfully!'
+    }
     if (response.data.success === true) {
-      dispatch({ type: types.ADD_STORY_SUCCESS });
-      history.push('/dashboard')
+      dispatch({ type: types.STORY_MSG, payload });
+      window.setTimeout( () => {
+        dispatch({ type: types.STORY_PROCESS_COMPLETE });
+        history.push('/dashboard')
+    }, 2000);
+      
     }
     else {
-      dispatch({ type: types.ADD_STORY_FAIL });
+      const payload = {
+        category: 'error',
+				value: 'Error! Story could not be added. Check connection!'
+      }
+      dispatch({ type: types.STORY_MSG, payload});
     }
   }
   catch{
-    const loginError = 'Internet/Server Connection ERROR! Check your Internet Connection';
-    dispatch({ type: types.VALIDATION_ERROR, loginError });
+    const appError = 'Internet/Server Connection ERROR! Check your Internet Connection';
+    dispatch({ type: types.APP_ERROR, appError });
   }
 	
 	return null;
 };
 
-const getSingleStoryAction = (storySummary) => async (dispatch) => {
+const getSingleStoryAction = (storyId) => async (dispatch) => {
 	dispatch({type: types.IS_LOADING});
   try {
-
-    const getStoriesUrl = '/api/getStories';
+    const getStoriesUrl = '/getStories';
     const response = await API.get(getStoriesUrl).then((res) => {
       return res;
     });
-
-    const singleStory = response.data.filter(
-      (story) => story.summary ===  storySummary
+    const singleStory = response.data.data.filter(
+      (story) => story.id ===  parseInt(storyId, 10)
     )   
       dispatch({ type: types.GET_SINGLE_STORY, payload: singleStory });
 
@@ -89,15 +88,38 @@ const getSingleStoryAction = (storySummary) => async (dispatch) => {
 
   }
   catch{
-    const loginError = 'Internet/Server Connection ERROR! Check your Internet Connection';
-    dispatch({ type: types.VALIDATION_ERROR, loginError });
+    const appError = 'Internet/Server Connection ERROR! Check your Internet Connection';
+    dispatch({ type: types.APP_ERROR, appError });
   }
-	
 	return null;
 };
 
-const approveStoryAction = (storyInfo) => async (dispatch) => {
-  console.log(storyInfo);
+const storyStatusAction = (storyInfo, category, history) => async (dispatch) => {
+  if (category === 'approve') {
+    dispatch({ type: types.GET_SINGLE_STORY, payload: storyInfo });
+    const payload = {
+      category: 'status',
+      value: 'Story status updated to approved!'
+    }
+    dispatch({ type: types.STORY_MSG, payload});
+    window.setTimeout( () => {
+      dispatch({ type: types.STORY_PROCESS_COMPLETE });
+      history.push('/dashboard')
+  }, 2000);
+  } else {
+    dispatch({ type: types.GET_SINGLE_STORY, payload: storyInfo });
+    const payload = {
+      category: 'status',
+      value: 'Story status updated to rejected!'
+    }
+    dispatch({ type: types.STORY_MSG, payload});
+    window.setTimeout( () => {
+      dispatch({ type: types.STORY_PROCESS_COMPLETE });
+      history.push('/dashboard')
+  }, 2000);
+  }
+
+
 
 }
-export { getStoriesAction, addStoryAction, getSingleStoryAction, approveStoryAction };
+export { getStoriesAction, addStoryAction, getSingleStoryAction, storyStatusAction };

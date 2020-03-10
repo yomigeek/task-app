@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { approveStoryAction, getSingleStoryAction } from '../../actions/storiesAction';
+import { storyStatusAction, getSingleStoryAction } from '../../actions/storiesAction';
 
-const ViewStory = ({ match }) => {
+const ViewStory = ({ match, history }) => {
 	const appState = useSelector((state) => state);
 	const dispatch = useDispatch();
 	const { id } = match.params;
@@ -14,13 +14,19 @@ const ViewStory = ({ match }) => {
 		[ dispatch, id ]
 	);
 
-	const approveHandler = (e) => {
+	const statusHandler = (e, status, history) => {
 		e.preventDefault();
-		const updatedStory = {
-			...appState.stories.singleStory[0],
-			status: 'approved'
-		};
-		dispatch(approveStoryAction(updatedStory));
+		const updatedStory = [
+			{
+				...appState.stories.singleStory[0],
+				status
+			}
+		];
+		if (status === 'approved') {
+			dispatch(storyStatusAction(updatedStory, 'approve', history));
+		} else {
+			dispatch(storyStatusAction(updatedStory, 'reject', history));
+		}
 	};
 
 	return (
@@ -37,6 +43,7 @@ const ViewStory = ({ match }) => {
 					<div className="form-header-text">
 						<b>Story Information</b>
 					</div>
+					<div className="success-msg">{appState.stories.message.value}</div>
 					{appState.stories.singleStory.map((story) => (
 						<div key={story.id}>
 							<div>
@@ -71,11 +78,19 @@ const ViewStory = ({ match }) => {
 					{appState.auth.userInfo.role === 'admin' ? (
 						<div>
 							<br />
-							<button type="submit" className="btn-success app-button" onClick={approveHandler}>
+							<button
+								type="submit"
+								className="btn-success app-button"
+								onClick={(e) => statusHandler(e, 'approved', history)}
+							>
 								Approve
 							</button>
 							&nbsp;&nbsp;&nbsp;
-							<button type="submit" className="btn-danger app-button">
+							<button
+								type="submit"
+								className="btn-danger app-button"
+								onClick={(e) => statusHandler(e, 'rejected', history)}
+							>
 								Reject
 							</button>
 						</div>

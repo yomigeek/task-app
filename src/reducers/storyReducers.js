@@ -21,28 +21,12 @@ const storyReducer = (state = initialState, action) => {
 				...state,
 				singleStory: payload
 			};
-		// case types.UPDATE_STORY:
-		// 	return {
-		// 		...state,
-		// 		stories: payload
-		// 	};
-		case types.ADD_STORY_SUCCESS:
+		case types.STORY_MSG:
 			return {
 				...state,
-				message: {
-					category: 'success',
-					value: 'Story has been added successfully!'
-				}
+				message: payload
 			};
-		case types.ADD_STORY_FAIL:
-			return {
-				...state,
-				message: {
-					category: 'error',
-					value: 'Error! Story could not be added. Check connection!'
-				}
-			};
-		case types.ADDING_STORY:
+		case types.STORY_PROCESS_COMPLETE:
 			return {
 				...state,
 				message: {

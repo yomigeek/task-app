@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import uuid from 'react-uuid';
 
 const StoryTable = ({ stories }) => {
 	let num = 1;
@@ -22,10 +21,10 @@ const StoryTable = ({ stories }) => {
 				</thead>
 				<tbody>
 					{stories.stories.map((story) => (
-						<tr key={uuid()}>
+						<tr key={story.id}>
 							<th scope="row">{num++}</th>
 							<td>
-								<Link to={`/view/${story.summary}`}>{story.summary}</Link>
+								<Link to={`/view/${story.id}`}>{story.summary}</Link>
 							</td>
 							<td>{story.description}</td>
 							<td>{story.type}</td>
