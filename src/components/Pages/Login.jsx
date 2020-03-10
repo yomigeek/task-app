@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import loginAction from '../../actions/loginAction';
+import { loginAction } from '../../actions/userAction';
 
 const Login = ({ history }) => {
 	const [ userEmail, setEmail ] = useState('');
@@ -8,7 +8,7 @@ const Login = ({ history }) => {
 	const [ userRole, setRole ] = useState(false);
 	const dispatch = useDispatch();
 
-  const appState = useSelector((state) => state);
+	const appState = useSelector((state) => state);
 
 	const formSubmitHandler = (e) => {
 		e.preventDefault();
@@ -41,9 +41,7 @@ const Login = ({ history }) => {
 							className="app-logo"
 						/>
 					</div>
-          <div className="error">{
-            appState.auth.loginError
-          }</div>
+					<div className="error">{appState.auth.loginError}</div>
 
 					<div className="form-group">
 						<label htmlFor="email">Email address</label>
@@ -52,8 +50,8 @@ const Login = ({ history }) => {
 							className="form-control"
 							placeholder="Enter email"
 							value={userEmail}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+							onChange={(e) => setEmail(e.target.value)}
+							required
 						/>
 					</div>
 					<div className="form-group">
@@ -63,8 +61,8 @@ const Login = ({ history }) => {
 							className="form-control"
 							placeholder="Password"
 							value={userPwd}
-              onChange={(e) => setPwd(e.target.value)}
-              required
+							onChange={(e) => setPwd(e.target.value)}
+							required
 						/>
 					</div>
 					<div className="form-group">
